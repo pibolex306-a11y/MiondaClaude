@@ -1,0 +1,19 @@
+[functions.catalog-search]
+verify_jwt = false
+entrypoint = "./functions/catalog-search/index.ts"
+
+[functions.link-resolver]
+verify_jwt = false
+entrypoint = "./functions/link-resolver/index.ts"
+
+[functions.lastfm-import]
+verify_jwt = true
+entrypoint = "./functions/lastfm-import/index.ts"
+
+[functions.lastfm-recommendations]
+verify_jwt = true
+entrypoint = "./functions/lastfm-recommendations/index.ts"
+
+[functions.lastfm-now-playing]
+verify_jwt = true
+entrypoint = "./functions/lastfm-now-playing/index.ts"

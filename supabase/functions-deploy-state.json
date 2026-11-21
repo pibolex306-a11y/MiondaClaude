@@ -1,0 +1,25 @@
+{
+  "projectId": "71787017",
+  "functions": {
+    "catalog-search": {
+      "hasChanged": false,
+      "hash": "bdf02a4261816be64888f5babc4ac306738acae373a8af607b1e38a92c6369b1"
+    },
+    "lastfm-import": {
+      "hasChanged": false,
+      "hash": "308bd5223eaceb7689cb5afbd661a2534cd0a79b0eac6e4e97cb065b989d4af6"
+    },
+    "lastfm-now-playing": {
+      "hasChanged": false,
+      "hash": "6a1101d815a75ad587f07aecbf9afb6b3fe010e0241e7c4dfe14b2d4cf843de7"
+    },
+    "lastfm-recommendations": {
+      "hasChanged": false,
+      "hash": "294726c4e716e4934449151d778c924461505caf4d492825a8f469831916d19a"
+    },
+    "link-resolver": {
+      "hasChanged": false,
+      "hash": "a669572de787bfadef869ae5eedb101f594ada9dbac490ea7d7cbf1d3fee9974"
+    }
+  }
+}
