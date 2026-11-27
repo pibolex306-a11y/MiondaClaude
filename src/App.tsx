@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react';
 import { AuthProvider, useAuth } from '@/hooks/useAuth';
 import { useHistorySync } from '@/hooks/useHistorySync';
 import { Login } from '@/views/Login';
+import { CodeGate } from '@/views/CodeGate';
 import { Onboarding } from '@/views/Onboarding';
 import { Wall } from '@/views/Wall';
 import { ProfileView } from '@/views/ProfileView';
@@ -13,7 +14,7 @@ import { BottomNav, type Tab } from '@/components/BottomNav';
 import { MiniPlayer } from '@/components/MiniPlayer';
 
 function AppContent() {
-  const { user, profile, loading, demoMode, enterDemo, exitDemo } = useAuth();
+  const { user, profile, loading, demoMode, enterDemo, exitDemo, approved } = useAuth();
   const [tab, setTab] = useState<Tab>('muro');
   const [viewingProfileId, setViewingProfileId] = useState<string | null>(null);
   const previewMode = demoMode;
@@ -43,6 +44,11 @@ function AppContent() {
 
   if (!user && !previewMode) {
     return <Login onDemo={enterDemo} />;
+  }
+
+  // Puerta de entrada del grupo: sin código canjeado no se ve nada del grupo.
+  if (user && !approved) {
+    return <CodeGate />;
   }
 
   if (needsOnboarding) {

@@ -19,6 +19,7 @@ export type Profile = {
   suspended: boolean;
   wrapped_opt_in: boolean;
   show_now_playing: boolean;
+  approved?: boolean;
   notion_origin: Record<string, unknown> | null;
   created_at: string;
   updated_at: string;

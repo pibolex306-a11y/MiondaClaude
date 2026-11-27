@@ -13,6 +13,8 @@ type AuthContextValue = {
   demoMode: boolean;
   enterDemo: () => void;
   exitDemo: () => Promise<void>;
+  approved: boolean;
+  redeemCode: (code: string) => Promise<boolean>;
 };
 
 const AuthContext = createContext<AuthContextValue>({
@@ -25,6 +27,8 @@ const AuthContext = createContext<AuthContextValue>({
   demoMode: false,
   enterDemo: () => {},
   exitDemo: async () => {},
+  approved: false,
+  redeemCode: async () => false,
 });
 
 export function AuthProvider({ children }: { children: ReactNode }) {
@@ -33,6 +37,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   const [profile, setProfile] = useState<Profile | null>(null);
   const [loading, setLoading] = useState(true);
   const [demoMode, setDemoMode] = useState(false);
+  const [approved, setApproved] = useState(false);
 
   async function fetchProfile(uid: string) {
     const { data } = await supabase
@@ -40,7 +45,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       .select('*')
       .eq('id', uid)
       .maybeSingle();
-    setProfile(data as Profile | null);
+    const p = data as Profile | null;
+    setProfile(p);
+    setApproved(p?.approved === true || p?.is_admin === true);
   }
 
   async function refreshProfile() {
@@ -91,6 +98,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   function enterDemo() {
     setDemoMode(true);
+    setApproved(true);
     setLoading(false);
   }
 
@@ -102,10 +110,21 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   async function signOut() {
     await supabase.auth.signOut();
     setProfile(null);
+    setApproved(false);
+  }
+
+  async function redeemCode(code: string): Promise<boolean> {
+    const { data, error } = await supabase.rpc('redeem_access_code', { p_code: code });
+    if (error) throw error;
+    if (data === true) {
+      setApproved(true);
+      if (user) await fetchProfile(user.id);
+    }
+    return data === true;
   }
 
   return (
-    <AuthContext.Provider value={{ session, user, profile, loading, signOut, refreshProfile, demoMode, enterDemo, exitDemo }}>
+    <AuthContext.Provider value={{ session, user, profile, loading, signOut, refreshProfile, demoMode, enterDemo, exitDemo, approved, redeemCode }}>
       {children}
     </AuthContext.Provider>
   );
